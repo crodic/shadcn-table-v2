@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { DataTableDateFilter } from '@/components/data-table/data-table-date-filter';
 import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter';
 import { Button } from '../ui/button';
-import { XIcon } from 'lucide-react';
+import { CircleXIcon, XIcon } from 'lucide-react';
 import { DataTableSliderFilter } from './data-table-slider-filter';
 
 export function DataTableColumnFilter<TData>({
@@ -15,18 +15,44 @@ export function DataTableColumnFilter<TData>({
     isDataLoading?: boolean;
 }) {
     const meta = column.columnDef.meta;
+    const Icon = meta?.icon;
 
     if (!column.getCanFilter() || !meta?.variant) return null;
 
     switch (meta.variant) {
         case 'text':
             return (
-                <Input
-                    className="h-8"
-                    placeholder={meta.placeholder ?? meta.label}
-                    value={(column.getFilterValue() as string) ?? ''}
-                    onChange={(e) => column.setFilterValue(e.target.value)}
-                />
+                <div className="relative">
+                    <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50">
+                        {Icon && <Icon className="size-4" />}
+                    </div>
+                    <Input
+                        type="text"
+                        placeholder={meta.placeholder ?? meta.label}
+                        className="peer pl-9 h-8"
+                        value={(column.getFilterValue() as string) ?? ''}
+                        onChange={(e) => column.setFilterValue(e.target.value)}
+                    />
+                    {(column.getFilterValue() as string) && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                                column.setFilterValue('');
+                            }}
+                            className="text-muted-foreground focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
+                        >
+                            <CircleXIcon className="size-4" />
+                            <span className="sr-only">Clear input</span>
+                        </Button>
+                    )}
+                </div>
+                // <Input
+                //     className="h-8"
+                //     placeholder={meta.placeholder ?? meta.label}
+                //     value={(column.getFilterValue() as string) ?? ''}
+                //     onChange={(e) => column.setFilterValue(e.target.value)}
+                // />
             );
 
         case 'select':

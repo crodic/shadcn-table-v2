@@ -37,7 +37,7 @@ export function DataTableTextSearch<TData>({ table }: { table: Table<TData> }) {
     return (
         <div className="flex items-center gap-2">
             <Select value={activeColumnId ?? undefined} onValueChange={onColumnChange}>
-                <SelectTrigger className="h-8 w-[160px]">
+                <SelectTrigger className="h-8 w-40">
                     <SelectValue placeholder="Select field" />
                 </SelectTrigger>
 

@@ -17,6 +17,9 @@ import { TasksTableActionBar } from './tasks-table-action-bar';
 import { getTasksTableColumns } from './tasks-table-columns';
 import { UpdateTaskSheet } from './update-task-sheet';
 import { useRouter } from 'next/navigation';
+import { parseAsArrayOf, parseAsInteger, parseAsString, SingleParser, useQueryState, useQueryStates } from 'nuqs';
+import { getSortingStateParser } from '@/lib/parsers';
+import useGetFilterParams from '@/hooks/use-get-filter-params';
 
 interface TasksTableProps {
     promises: Promise<
@@ -32,11 +35,10 @@ interface TasksTableProps {
 
 export function TasksTable({ promises, queryKeys }: TasksTableProps) {
     const { enableAdvancedFilter, filterFlag } = useFeatureFlags();
+    const [rowAction, setRowAction] = React.useState<DataTableRowAction<Task> | null>(null);
     const router = useRouter();
 
     const [{ data, pageCount }, statusCounts, priorityCounts, estimatedHoursRange] = React.use(promises);
-
-    const [rowAction, setRowAction] = React.useState<DataTableRowAction<Task> | null>(null);
 
     const columns = React.useMemo(
         () =>
@@ -48,6 +50,19 @@ export function TasksTable({ promises, queryKeys }: TasksTableProps) {
             }),
         [statusCounts, priorityCounts, estimatedHoursRange]
     );
+
+    const filterableColumns = React.useMemo(() => {
+        if (enableAdvancedFilter) return [];
+
+        return columns.filter((column) => column.enableColumnFilter);
+    }, [columns, enableAdvancedFilter]);
+
+    const { filter } = useGetFilterParams<Task>({ allowedSorts: ['status'], filterableColumns });
+
+    React.useEffect(() => {
+        console.log(filter);
+        console.log('Call API');
+    }, [filter]);
 
     const { table, shallow, debounceMs, throttleMs } = useDataTable({
         data,

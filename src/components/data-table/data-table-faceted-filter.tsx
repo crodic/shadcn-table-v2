@@ -72,6 +72,7 @@ export function DataTableFacetedFilter<TData, TValue>({
     );
 
     const hasValue = selectedValues.size > 0;
+    const hasShowTopResetFilter = selectedValues.size > 3;
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -137,6 +138,17 @@ export function DataTableFacetedFilter<TData, TValue>({
 
                     <CommandList className="max-h-full">
                         <CommandEmpty>No results found.</CommandEmpty>
+
+                        {hasShowTopResetFilter && (
+                            <>
+                                <CommandSeparator />
+                                <CommandGroup>
+                                    <CommandItem onSelect={() => onReset()} className="justify-center text-center">
+                                        Clear filters
+                                    </CommandItem>
+                                </CommandGroup>
+                            </>
+                        )}
 
                         <CommandGroup className="max-h-75 overflow-y-auto">
                             {options.map((option) => {

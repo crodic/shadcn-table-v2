@@ -47,12 +47,6 @@ export function DataTableColumnFilter<TData>({
                         </Button>
                     )}
                 </div>
-                // <Input
-                //     className="h-8"
-                //     placeholder={meta.placeholder ?? meta.label}
-                //     value={(column.getFilterValue() as string) ?? ''}
-                //     onChange={(e) => column.setFilterValue(e.target.value)}
-                // />
             );
 
         case 'select':

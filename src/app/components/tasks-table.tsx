@@ -34,7 +34,6 @@ interface TasksTableProps {
 }
 
 export function TasksTable({ promises, queryKeys }: TasksTableProps) {
-    // const { enableAdvancedFilter, filterFlag } = useFeatureFlags();
     const [rowAction, setRowAction] = React.useState<DataTableRowAction<Task> | null>(null);
     const router = useRouter();
 
@@ -52,8 +51,6 @@ export function TasksTable({ promises, queryKeys }: TasksTableProps) {
     );
 
     const filterableColumns = React.useMemo(() => {
-        // if (enableAdvancedFilter) return [];
-
         return columns.filter((column) => column.enableColumnFilter);
     }, [columns]);
 
@@ -91,31 +88,6 @@ export function TasksTable({ promises, queryKeys }: TasksTableProps) {
                 onRowClick={handleClickOnRow}
                 enableAdvancedToolbarFilter
             >
-                {/* {enableAdvancedFilter ? (
-                    <DataTableAdvancedToolbar table={table}>
-                        <DataTableSortList table={table} align="start" />
-                        {filterFlag === 'advancedFilters' ? (
-                            <DataTableFilterList
-                                table={table}
-                                shallow={shallow}
-                                debounceMs={debounceMs}
-                                throttleMs={throttleMs}
-                                align="start"
-                            />
-                        ) : (
-                            <DataTableFilterMenu
-                                table={table}
-                                shallow={shallow}
-                                debounceMs={debounceMs}
-                                throttleMs={throttleMs}
-                            />
-                        )}
-                    </DataTableAdvancedToolbar>
-                ) : (
-                    <DataTableToolbar table={table}>
-                        <DataTableSortList table={table} align="end" />
-                    </DataTableToolbar>
-                )} */}
                 <DataTableToolbar table={table}>
                     <DataTableSortList table={table} align="end" />
                 </DataTableToolbar>

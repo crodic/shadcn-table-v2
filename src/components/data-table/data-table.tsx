@@ -13,6 +13,7 @@ interface DataTableProps<TData> extends React.ComponentProps<'div'> {
     actionBar?: React.ReactNode;
     onRowClick?: (row: TData) => void;
     isDataLoading?: boolean;
+    enableAdvancedToolbarFilter?: boolean;
 }
 
 export function DataTable<TData>({
@@ -22,6 +23,7 @@ export function DataTable<TData>({
     className,
     onRowClick,
     isDataLoading,
+    enableAdvancedToolbarFilter = false,
     ...props
 }: DataTableProps<TData>) {
     return (
@@ -32,28 +34,34 @@ export function DataTable<TData>({
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <TableHead
-                                        key={header.id}
-                                        colSpan={header.colSpan}
-                                        style={{
-                                            ...getCommonPinningStyles({ column: header.column }),
-                                        }}
-                                        className={cn('my-1 space-y-1', header.column.getIndex() && 'align-top')}
-                                    >
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(header.column.columnDef.header, header.getContext())}
+                                {headerGroup.headers.map((header) => {
+                                    const shouldRenderColumnFilter = (column: typeof header.column) =>
+                                        enableAdvancedToolbarFilter &&
+                                        (column.getCanFilter() || column.columnDef.meta?.variant);
 
-                                        {(header.column.getCanFilter() || header.column.columnDef.meta?.variant) && (
-                                            <DataTableColumnFilter
-                                                column={header.column}
-                                                table={table}
-                                                isDataLoading={isDataLoading}
-                                            />
-                                        )}
-                                    </TableHead>
-                                ))}
+                                    return (
+                                        <TableHead
+                                            key={header.id}
+                                            colSpan={header.colSpan}
+                                            style={{
+                                                ...getCommonPinningStyles({ column: header.column }),
+                                            }}
+                                            className={cn('my-1 space-y-1', header.column.getIndex() && 'align-top')}
+                                        >
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(header.column.columnDef.header, header.getContext())}
+
+                                            {shouldRenderColumnFilter(header.column) && (
+                                                <DataTableColumnFilter
+                                                    column={header.column}
+                                                    table={table}
+                                                    isDataLoading={isDataLoading}
+                                                />
+                                            )}
+                                        </TableHead>
+                                    );
+                                })}
                             </TableRow>
                         ))}
                     </TableHeader>

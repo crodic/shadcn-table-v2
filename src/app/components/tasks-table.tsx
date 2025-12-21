@@ -85,7 +85,12 @@ export function TasksTable({ promises, queryKeys }: TasksTableProps) {
 
     return (
         <>
-            <DataTable table={table} actionBar={<TasksTableActionBar table={table} />} onRowClick={handleClickOnRow}>
+            <DataTable
+                table={table}
+                actionBar={<TasksTableActionBar table={table} />}
+                onRowClick={handleClickOnRow}
+                enableAdvancedToolbarFilter
+            >
                 {enableAdvancedFilter ? (
                     <DataTableAdvancedToolbar table={table}>
                         <DataTableSortList table={table} align="start" />

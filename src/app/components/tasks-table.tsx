@@ -61,11 +61,10 @@ export function TasksTable({ promises, queryKeys }: TasksTableProps) {
         console.log('Call API');
     }, [filter]);
 
-    const { table, shallow, debounceMs, throttleMs } = useDataTable({
+    const { table } = useDataTable({
         data,
         columns,
         pageCount,
-        // enableAdvancedFilter,
         initialState: {
             sorting: [{ id: 'createdAt', desc: true }],
             columnPinning: { right: ['actions'] },

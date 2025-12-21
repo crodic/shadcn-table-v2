@@ -26,6 +26,8 @@ export async function getTasks(input: GetTasksSchema) {
   cacheLife({ revalidate: 1, stale: 1, expire: 60 });
   cacheTag("tasks");
 
+  console.log(input.filters)
+
   try {
     const offset = (input.page - 1) * input.perPage;
     const advancedTable =
